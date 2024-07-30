@@ -10,7 +10,7 @@
     <!-- 扇形图 -->
     <!-- <div ref="piechart" style="width:368px;height:368px"></div> -->
         <!-- 扇形图 -->
-    <div ref="piechart1" style="width:368px;height:368px"></div>
+    <div id="piechart" ref="piechart1" style="width:308px;height:308px"></div>
     <!-- 柱状图 -->
     <div ref="chart" style="width:368px;height:368px"></div>
     <!-- 折线图 -->
@@ -333,9 +333,9 @@
           const option = {
     // backgroundColor: '#013954',
     title: {
-        text: '各系统损伤程度占比',
+        text: '系统损伤程度占比',
         left: 'center',
-        top: 10,
+        top: 5,
         textStyle: {
             color: '#fff'
         }
@@ -458,7 +458,9 @@
   // background-color: #0d3688;
 
   
-  background-image: url('./bg.png');
+  // background-image: url('./assest/bg1.jpg');
+  background-image: url('./assest/705.jpg');
+  background-repeat: no-repeat;
   .head{
     width: 100%;
     // background-color: #012da6;
@@ -474,6 +476,14 @@
     
     // color:blue;
   }
+  }
+
+  // 扇形图
+  #piechart{
+    transform: translate(100px,70px);
+  // background-image: url('./assest/703.jpg');
+  // background-color: red;
+    
   }
 
 }
