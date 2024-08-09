@@ -8,91 +8,133 @@
     </div>
 
     <div class="title2">
-      <div class="centertitle"><span class="hour">{{value}}</span>飞行小时损伤机体数字孪生</div>
-
+      <div class="centertitle">
+        <span class="hour">{{ value }}</span
+        >飞行小时损伤机体数字孪生
+      </div>
     </div>
 
     <!-- 主体内容 -->
     <div class="mainbody">
-     <div class="leftbody">
+      <div class="leftbody">
+        <!-- 扇形图 -->
+        <div
+          id="piechart"
+          ref="piechart1"
+          style="width: 338px; height: 238px"
+        ></div>
 
-    <!-- 扇形图 -->
-    <div
-      id="piechart"
-      ref="piechart1"
-      style="width: 338px; height: 238px"
-    >
-    </div>
+        <!-- 柱状图 -->
+        <!-- <div id="barchart" ref="barchart" style="width: 168px; height: 168px"></div> -->
 
-    <!-- 柱状图 -->
-    <!-- <div id="barchart" ref="barchart" style="width: 168px; height: 168px"></div> -->
+        <!-- 雷达图 -->
+        <div
+          ref="raderchart"
+          id="raderchart"
+          style="width: 468px; height: 246px"
+        ></div>
 
-      <!-- 雷达图 -->
-    <div ref="raderchart" id="raderchart" style="width: 468px; height: 246px"></div>
-    
+        <!-- <div ref="chart1" style="width: 468px; height: 468px"></div> -->
+      </div>
 
-    <!-- <div ref="chart1" style="width: 468px; height: 468px"></div> -->
-    </div>
+      <div class="centerbody">
+        <div class="top">
+          <div class="airplane">
+            <canvas id="canvas"></canvas>
+          </div>
+          <img
+            class="img"
+            src="../../../public/img/001.jpg"
+            alt=""
+            width="10px"
+            height="60px"
+          />
+        </div>
 
-    
-    <div class="centerbody">
-    
-    <div class="top">
-    <div class="airplane">
-    <canvas id="canvas"></canvas>
-    </div>
-    <img class="img" src="../../../public/img/001.jpg" alt="" width="10px" height="60px">
-    </div>
+        <!-- 折线图 -->
+        <div
+          class="linechart"
+          ref="linechart"
+          style="width: 598px; height: 248px"
+        ></div>
+      </div>
 
-    <!-- 折线图 -->
-      <div class="linechart" ref="linechart" style="width: 598px; height: 248px"></div>
+      <div class="rightbody">
+        <!-- 选择飞行时长 -->
+        <div class="choosetime">
+          选择
+          <span class="time">
+            <el-select
+              v-model="value"
+              placeholder="3000"
+              size="small"
+              style="width: 110px"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </span>
+          飞行小时
+        </div>
 
-      
-    </div>
+        <!-- AI预测告警 -->
+        <div class="aibox">
+          <div class="title">AI预测告警</div>
+          <div class="resttime">系统预测剩余寿命（飞行小时）</div>
+          <div class="time">
+            <div class="time1">
+              <div class="word">发动机</div>
+              <div class="number number1">3000</div>
+            </div>
+            <div class="time1">
+              <div class="word">APU</div>
+              <div class="number">2000</div>
+            </div>
+            <div class="time1">
+              <div class="word">电源系统</div>
+              <div class="number number3">4000</div>
+            </div>
+          </div>
+          <div class="risk">系统预测运行风险</div>
+          <div class="time">
+            <div class="time1">
+              <div class="word">发动机</div>
+              <div class="number number1">6.9%</div>
+            </div>
+            <div class="time1">
+              <div class="word">APU</div>
+              <div class="number">5.6%</div>
+            </div>
+            <div class="time1">
+              <div class="word">电源系统</div>
+              <div class="number number3">3.1%</div>
+            </div>
+          </div>
+        </div>
 
-    <div class="rightbody">
-    
-    <!-- 选择飞行时长 -->
-    <div class="choosetime">
-      选择 <span class="time">
-         <el-select v-model="value" placeholder="3000" size="small" style="width:110px">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select>
-      </span>
-      飞行小时
-    </div>
-
-    
-    <!-- AI预测告警 -->
-    <div class="aibox">
-      <div class="title">
-      AI预测告警
+        <!-- 仪表盘 -->
+        <!-- <div
+          ref="ratechart"
+          id="ratechart"
+          style="width: 226px; height: 226px"
+        ></div> -->
       </div>
     </div>
-
-
-    <!-- 仪表盘 -->
-    <div ref="ratechart" id="ratechart" style="width: 246px; height: 246px"></div>
-
-    </div>
-    </div>
-
-
   </div>
 </template>
 
 <script>
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader';
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 // import echarts from "echarts"
-import * as echarts from 'echarts';
+import * as echarts from "echarts";
 
 // import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -100,99 +142,104 @@ import * as echarts from 'echarts';
 export default {
   data() {
     return {
-       options: [{
-          value: '100',
-          label: '100'
-        }, {
-          value: '200',
-          label: '200'
-        }, {
-          value: '300',
-          label: '300'
-        }, {
-          value: '400',
-          label: '400'
-        }, 
+      options: [
         {
-          value: '500',
-          label: '500'
+          value: "100",
+          label: "100",
         },
         {
-          value: '600',
-          label: '600'
+          value: "200",
+          label: "200",
         },
         {
-          value: '700',
-          label: '700'
+          value: "300",
+          label: "300",
         },
         {
-          value: '800',
-          label: '800'
+          value: "400",
+          label: "400",
         },
         {
-          value: '900',
-          label: '900'
+          value: "500",
+          label: "500",
         },
         {
-          value: '1000',
-          label: '1000'
+          value: "600",
+          label: "600",
         },
         {
-          value: '1100',
-          label: '1100'
+          value: "700",
+          label: "700",
         },
         {
-          value: '1200',
-          label: '1200'
+          value: "800",
+          label: "800",
         },
         {
-          value: '1300',
-          label: '1300'
+          value: "900",
+          label: "900",
         },
         {
-          value: '1400',
-          label: '1400'
+          value: "1000",
+          label: "1000",
         },
         {
-          value: '1500',
-          label: '1500'
-        }
-        ],
-        value: '3000'
-    }
+          value: "1100",
+          label: "1100",
+        },
+        {
+          value: "1200",
+          label: "1200",
+        },
+        {
+          value: "1300",
+          label: "1300",
+        },
+        {
+          value: "1400",
+          label: "1400",
+        },
+        {
+          value: "1500",
+          label: "1500",
+        },
+      ],
+      value: "3000",
+      colorList: ["red", "blue"],
+    };
   },
   mounted() {
     this.initThreeJS();
-    //柱状图
-    this.getBarEchartData();
-    //折线图
-    this.getEchartData1();
+
     //扇形图
     this.getEchartData2();
+
+    //柱状图
+    this.getBarEchartData();
+
     //雷达图
     this.getRaderChart();
+
+    //折线图
+    this.getEchartData1();
 
     //仪表盘
     this.getRateEchartData();
   },
   methods: {
-
     initThreeJS() {
-      const canvas = document.querySelector('#canvas');
+      const canvas = document.querySelector("#canvas");
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
       //调节飞机的背景颜色
-      renderer.setClearColor(0x000000,0);
-
+      renderer.setClearColor(0x000000, 0);
 
       const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
       // camera.position.set(6, 6, 6);
-      camera.position.set(4.6, 3.0,4.7);
+      camera.position.set(4.6, 3.0, 4.7);
       camera.lookAt(0, 0, 0);
-
 
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
-
 
       /**
        * Loaders
@@ -200,42 +247,37 @@ export default {
       const gltfLoader = new GLTFLoader();
       const exrLoader = new EXRLoader();
 
-
       const scene = new THREE.Scene();
-
 
       /**
        * Models
        */
-      gltfLoader.load('/models/aircraft/scene.glb', (gltf) => {
+      gltfLoader.load("/models/aircraft/scene.glb", (gltf) => {
         console.log(gltf.scene);
         scene.add(gltf.scene);
       });
-
 
       /**
        * Environment Map
        */
       exrLoader.load(
-        '/textures/environmentMaps/nvidiaCanvas-4k.exr',
+        "/textures/environmentMaps/nvidiaCanvas-4k.exr",
         (environmentMap) => {
           environmentMap.mapping = THREE.EquirectangularReflectionMapping;
           scene.environment = environmentMap;
         }
       );
 
-
       function resizeRendererToDisplaySize() {
         const canvas = renderer.domElement;
         const width = (canvas.clientWidth * window.devicePixelRatio) | 0;
         const height = (canvas.clientHeight * window.devicePixelRatio) | 0;
-        const needResize = canvas.width!== width || canvas.height!== height;
+        const needResize = canvas.width !== width || canvas.height !== height;
         if (needResize) {
           renderer.setSize(width, height, false);
         }
         return needResize;
       }
-
 
       function render() {
         if (resizeRendererToDisplaySize()) {
@@ -244,21 +286,15 @@ export default {
           camera.updateProjectionMatrix();
         }
 
-
         renderer.render(scene, camera);
         controls.update();
         // console.log(123,camera.position)
 
-
         requestAnimationFrame(render);
       }
 
-
       render();
-    }
-  ,
-
-
+    },
     //饼图2
     getEchartData2() {
       const piechart1 = this.$refs.piechart1;
@@ -269,13 +305,12 @@ export default {
           title: {
             text: "系统损伤程度占比",
             left: "right",
-            top:16,
-            right:10,
+            top: 16,
+            right: 10,
             // top: 10,
             textStyle: {
               color: "#85cfe3",
-               fontSize : 16,
-              
+              fontSize: 16,
             },
           },
           tooltip: {
@@ -294,7 +329,7 @@ export default {
               "液压系统",
               "电源系统",
               "导航系统",
-  
+
               "气源系统",
             ],
             textStyle: {
@@ -305,7 +340,7 @@ export default {
             {
               name: "系统损伤程度",
               type: "pie",
-              radius: "85%",
+              radius: "75%",
               center: ["50%", "50%"],
               data: [
                 {
@@ -392,195 +427,199 @@ export default {
       });
     },
 
-
-
-
     //柱状图
     getBarEchartData() {
       const barchart = this.$refs.barchart;
       if (barchart) {
         const myChart = this.$echarts.init(barchart);
 
-var data = [{
-    "name": "一月",
-    "value": 80
-}, {
-    "name": "二月",
-    "value": 87.8
-}, {
-    "name": "三月",
-    "value": 71
-}, {
-    "name": "四月",
-    "value": 80
-}, {
-    "name": "五月",
-    "value": 66
-}, {
-    "name": "六月",
-    "value": 80
-}, {
-    "name": "七月",
-    "value": 80
-}];
-var xData = [],
-    yData = [];
-var min = 50; 
-data.map(function(a, b) {
-    xData.push(a.name);
-    if (a.value === 0) {
-        yData.push(a.value + min);
-    } else {
-        yData.push(a.value);
-    }
-});
- const option = {
-    backgroundColor:"#111c4e",
-    color: ['#3398DB'],
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'line',
-            lineStyle: {
-                opacity: 0
-            }
-        },
-        formatter: function(prams) {
-            if (prams[0].data === min) {
-                return "合格率：0%"
-            } else {
-                return "合格率：" + prams[0].data + "%"
-            }
-        }
-    },
-    legend: {
-        data: ['直接访问', '背景'],
-        show: false
-    },
-    grid: {
-        left: '0%',
-        right: '0%',
-        bottom: '5%',
-        top: '7%',
-        height: '85%',
-        containLabel: true,
-        z: 22
-    },
-    xAxis: [{
-        type: 'category',
-        gridIndex: 0,
-        data: xData,
-        axisTick: {
-            alignWithLabel: true
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#0c3b71'
-            }
-        },
-        axisLabel: {
-            show: true,
-             color: 'rgb(170,170,170)',
-             fontSize:16
-        }
-    }],
-    yAxis: [{
-            type: 'value',
-            gridIndex: 0,
-            splitLine: {
-                show: false
+        var data = [
+          {
+            name: "一月",
+            value: 80,
+          },
+          {
+            name: "二月",
+            value: 87.8,
+          },
+          {
+            name: "三月",
+            value: 71,
+          },
+          {
+            name: "四月",
+            value: 80,
+          },
+          {
+            name: "五月",
+            value: 66,
+          },
+          {
+            name: "六月",
+            value: 80,
+          },
+          {
+            name: "七月",
+            value: 80,
+          },
+        ];
+        var xData = [],
+          yData = [];
+        var min = 50;
+        data.map(function (a, b) {
+          xData.push(a.name);
+          if (a.value === 0) {
+            yData.push(a.value + min);
+          } else {
+            yData.push(a.value);
+          }
+        });
+        const option = {
+          backgroundColor: "#111c4e",
+          color: ["#3398DB"],
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "line",
+              lineStyle: {
+                opacity: 0,
+              },
             },
-            axisTick: {
-                show: false
+            formatter: function (prams) {
+              if (prams[0].data === min) {
+                return "合格率：0%";
+              } else {
+                return "合格率：" + prams[0].data + "%";
+              }
             },
-            min: min,
-            max: 100,
-            axisLine: {
+          },
+          legend: {
+            data: ["直接访问", "背景"],
+            show: false,
+          },
+          grid: {
+            left: "0%",
+            right: "0%",
+            bottom: "5%",
+            top: "7%",
+            height: "85%",
+            containLabel: true,
+            z: 22,
+          },
+          xAxis: [
+            {
+              type: "category",
+              gridIndex: 0,
+              data: xData,
+              axisTick: {
+                alignWithLabel: true,
+              },
+              axisLine: {
                 lineStyle: {
-                    color: '#0c3b71'
-                }
+                  color: "#0c3b71",
+                },
+              },
+              axisLabel: {
+                show: true,
+                color: "rgb(170,170,170)",
+                fontSize: 16,
+              },
             },
-            axisLabel: {
-                color: 'rgb(170,170,170)',
-                formatter: '{value} %'
-            }
-        },
-        {
-            type: 'value',
-            gridIndex: 0,
-            min: min,
-            max: 100,
-            splitNumber: 12,
-            splitLine: {
-                show: false
+          ],
+          yAxis: [
+            {
+              type: "value",
+              gridIndex: 0,
+              splitLine: {
+                show: false,
+              },
+              axisTick: {
+                show: false,
+              },
+              min: min,
+              max: 100,
+              axisLine: {
+                lineStyle: {
+                  color: "#0c3b71",
+                },
+              },
+              axisLabel: {
+                color: "rgb(170,170,170)",
+                formatter: "{value} %",
+              },
             },
-            axisLine: {
-                show: false
-            },
-            axisTick: {
-                show: false
-            },
-            axisLabel: {
-                show: false
-            },
-            splitArea: {
+            {
+              type: "value",
+              gridIndex: 0,
+              min: min,
+              max: 100,
+              splitNumber: 12,
+              splitLine: {
+                show: false,
+              },
+              axisLine: {
+                show: false,
+              },
+              axisTick: {
+                show: false,
+              },
+              axisLabel: {
+                show: false,
+              },
+              splitArea: {
                 show: true,
                 areaStyle: {
-                    color: ['rgba(250,250,250,0.0)', 'rgba(250,250,250,0.05)']
-                }
-            }
-        }
-    ],
-    series: [{
-            name: '合格率',
-            type: 'bar',
-            barWidth: '30%',
-            xAxisIndex: 0,
-            yAxisIndex: 0,
-            itemStyle: {
-                normal: {
-                    barBorderRadius: 30,
-                    color: new this.echarts.graphic.LinearGradient(
-                        0, 0, 0, 1, [{
-                                offset: 0,
-                                color: '#00feff'
-                            },
-                            {
-                                offset: 0.5,
-                                color: '#027eff'
-                            },
-                            {
-                                offset: 1,
-                                color: '#0286ff'
-                            }
-                        ]
-                    )
-                }
+                  color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"],
+                },
+              },
             },
-            data: yData,
-            zlevel: 11
-
-        },
-        {
-            name: '背景',
-            type: 'bar',
-            barWidth: '50%',
-            xAxisIndex: 0,
-            yAxisIndex: 1,
-            barGap: '-135%',
-            data: [100, 100, 100, 100, 100, 100, 100],
-            itemStyle: {
+          ],
+          series: [
+            {
+              name: "合格率",
+              type: "bar",
+              barWidth: "30%",
+              xAxisIndex: 0,
+              yAxisIndex: 0,
+              itemStyle: {
                 normal: {
-                    color: 'rgba(255,255,255,0.1)'
-                }
+                  barBorderRadius: 30,
+                  color: new this.echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {
+                      offset: 0,
+                      color: "#00feff",
+                    },
+                    {
+                      offset: 0.5,
+                      color: "#027eff",
+                    },
+                    {
+                      offset: 1,
+                      color: "#0286ff",
+                    },
+                  ]),
+                },
+              },
+              data: yData,
+              zlevel: 11,
             },
-            zlevel: 9
-        },
-      
-    ]
-};
-
-
+            {
+              name: "背景",
+              type: "bar",
+              barWidth: "50%",
+              xAxisIndex: 0,
+              yAxisIndex: 1,
+              barGap: "-135%",
+              data: [100, 100, 100, 100, 100, 100, 100],
+              itemStyle: {
+                normal: {
+                  color: "rgba(255,255,255,0.1)",
+                },
+              },
+              zlevel: 9,
+            },
+          ],
+        };
 
         myChart.setOption(option);
         window.addEventListener("resize", function () {
@@ -601,12 +640,12 @@ data.map(function(a, b) {
         const myChart = this.$echarts.init(linechart);
         const option = {
           title: {
-            text: '各系统损伤时限趋势',
-            left: 'center',
+            text: "各系统损伤时限趋势",
+            left: "center",
             top: 0,
             textStyle: {
-          color: '#8ed1fd'
-          }
+              color: "#8ed1fd",
+            },
           },
           tooltip: {
             trigger: "axis",
@@ -619,14 +658,15 @@ data.map(function(a, b) {
               "液压系统",
               "空调系统",
               "电源系统",
-              "导航系统"
+              "导航系统",
               // "起落架",
               // "气源系统",
             ],
+
             textStyle: {
               color: "#fff",
             },
-            show:false
+            show: false,
           },
           grid: {
             left: "3%",
@@ -653,17 +693,16 @@ data.map(function(a, b) {
               "2400",
               "2700",
               "3000",
-  
             ],
             axisLabel: {
-            color: '#8ed1fd' // 设置横轴标签文字颜色为红色
-        }
+              color: "#8ed1fd", // 设置横轴标签文字颜色为红色
+            },
           },
           yAxis: {
             type: "value",
             axisLabel: {
-            color: '#8ed1fd' // 设置横轴标签文字颜色为红色
-        }
+              color: "#8ed1fd", // 设置横轴标签文字颜色为红色
+            },
           },
           series: [
             {
@@ -675,9 +714,12 @@ data.map(function(a, b) {
                 1330,
               ],
               lineStyle: {
-                color: '#d54eb4',
-                type: 'solid',
-             }
+                color: "#d54eb4",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#d54eb4",
+              },
             },
             {
               name: "APU",
@@ -686,10 +728,13 @@ data.map(function(a, b) {
               data: [
                 220, 182, 191, 234, 290, 330, 310, 220, 182, 191, 234, 290, 330,
               ],
-            lineStyle: {
-                color: '#8ed1fd',
-                type: 'solid'
-             }
+              lineStyle: {
+                color: "#8ed1fd",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#8ed1fd",
+              },
             },
             {
               name: "燃油系统",
@@ -698,10 +743,13 @@ data.map(function(a, b) {
               data: [
                 150, 232, 201, 154, 190, 330, 410, 150, 232, 201, 154, 190, 330,
               ],
-             lineStyle: {
-                color: '#49a4e3',
-                type: 'solid'
-             }   
+              lineStyle: {
+                color: "#49a4e3",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#49a4e3",
+              },
             },
             {
               name: "液压系统",
@@ -710,10 +758,13 @@ data.map(function(a, b) {
               data: [
                 320, 332, 301, 334, 390, 330, 320, 320, 332, 301, 334, 390, 330,
               ],
-             lineStyle: {
-                color: '#03b7c9',
-                type: 'solid'
-             }  
+              lineStyle: {
+                color: "#002FA7",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#002FA7",
+              },
             },
             {
               name: "电源系统",
@@ -723,11 +774,13 @@ data.map(function(a, b) {
                 520, 632, 601, 734, 120, 30, 620, 820, 932, 901, 934, 1290,
                 1330,
               ],
-                lineStyle: {
-                color: '#fead25',
-                type: 'solid'
-             }  
-              
+              lineStyle: {
+                color: "#fead25",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#fead25",
+              },
             },
             // {
             //   name: "起落架",
@@ -740,9 +793,8 @@ data.map(function(a, b) {
             //          lineStyle: {
             //     color: '#03fcfd',
             //     type: 'solid'
-            //  }  
+            //  }
 
-              
             // },
             {
               name: "导航系统",
@@ -751,12 +803,14 @@ data.map(function(a, b) {
               data: [
                 120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230,
               ],
-                     lineStyle: {
-                color: '#03fcfd',
-                type: 'solid'
-             }  
-  
-            }
+              lineStyle: {
+                color: "#a4592b",
+                type: "solid",
+              },
+              itemStyle: {
+                color: "#a4592b",
+              },
+            },
             // {
             //   name: "气源系统",
             //   type: "line",
@@ -884,197 +938,206 @@ data.map(function(a, b) {
       });
     },
 
-
-
     //雷达图
-    getRaderChart(){
-        const raderchart = this.$refs.raderchart;
+    getRaderChart() {
+      const raderchart = this.$refs.raderchart;
       if (raderchart) {
         const myChart = this.$echarts.init(raderchart);
 
-var legendData = ['机体损伤原因', 'AI预测机体损伤原因']; //图例
+        var legendData = ["机体损伤原因", "AI预测机体损伤原因"]; //图例
 
-var indicator = [{
-        text: '疲劳损伤',
-        max: 30,
-    },
-    {
-        text: '环境因素',
-        max: 30
-    },
-    {
-        text: '机械磨损',
-        max: 30
-    },
-    {
-        text: '过载与冲击',
-        max: 30,
-        //  axisLabel: {show: true, textStyle: {fontSize: 18, color: '#333'}}
-    },
-    {
-        text: '制造缺陷',
-        max: 30
-    },
-    {
-        text: '外来物损伤',
-        max: 30
-    }
-    
-];
-var dataArr = [{
-        value: [28, 26, 21 ,19, 18, 17],
-        name: legendData[0],
-        itemStyle: {
-            normal: {
+        var indicator = [
+          {
+            text: "疲劳损伤",
+            max: 30,
+          },
+          {
+            text: "环境因素",
+            max: 30,
+          },
+          {
+            text: "机械磨损",
+            max: 30,
+          },
+          {
+            text: "过载与冲击",
+            max: 30,
+            //  axisLabel: {show: true, textStyle: {fontSize: 18, color: '#333'}}
+          },
+          {
+            text: "制造缺陷",
+            max: 30,
+          },
+          {
+            text: "外来物损伤",
+            max: 30,
+          },
+        ];
+        var dataArr = [
+          {
+            value: [28, 26, 21, 19, 18, 17],
+            name: legendData[0],
+            itemStyle: {
+              normal: {
                 lineStyle: {
-                    color: '#4A99FF',
-                    // shadowColor: '#4A99FF',
-                    // shadowBlur: 10,
+                  color: "#4A99FF",
+                  // shadowColor: '#4A99FF',
+                  // shadowBlur: 10,
                 },
-                shadowColor: '#4A99FF',
+                shadowColor: "#4A99FF",
                 shadowBlur: 10,
+              },
             },
-        },
-        areaStyle: {
-                normal: { // 单项区域填充样式
-                    color: {
-                        type: 'linear',
-                        x: 0, //右
-                        y: 0, //下
-                        x2: 1, //左
-                        y2: 1, //上
-                        colorStops: [{
-                            offset: 0,
-                            color: '#4A99FF'
-                        }, {
-                            offset: 0.5,
-                            color: 'rgba(0,0,0,0)'
-                        }, {
-                            offset: 1,
-                            color: '#4A99FF'
-                        }],
-                        globalCoord: false
+            areaStyle: {
+              normal: {
+                // 单项区域填充样式
+                color: {
+                  type: "linear",
+                  x: 0, //右
+                  y: 0, //下
+                  x2: 1, //左
+                  y2: 1, //上
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "#4A99FF",
                     },
-                    opacity: 1 // 区域透明度
-                }
-            }
-    },
-    {
-      value: [19, 21, 14 ,19, 16, 25],
-        name: legendData[1],
-        itemStyle: {
-            normal: {
+                    {
+                      offset: 0.5,
+                      color: "rgba(0,0,0,0)",
+                    },
+                    {
+                      offset: 1,
+                      color: "#4A99FF",
+                    },
+                  ],
+                  globalCoord: false,
+                },
+                opacity: 1, // 区域透明度
+              },
+            },
+          },
+          {
+            value: [19, 21, 14, 19, 16, 25],
+            name: legendData[1],
+            itemStyle: {
+              normal: {
                 lineStyle: {
-                    color: '#4BFFFC',
-                    // shadowColor: '#4BFFFC',
-                    // shadowBlur: 10,
+                  color: "#4BFFFC",
+                  // shadowColor: '#4BFFFC',
+                  // shadowBlur: 10,
                 },
-                shadowColor: '#4BFFFC',
+                shadowColor: "#4BFFFC",
                 shadowBlur: 10,
+              },
             },
-        },
-         areaStyle: {
-                normal: { // 单项区域填充样式
-                    color: {
-                        type: 'linear',
-                        x: 0, //右
-                        y: 0, //下
-                        x2: 1, //左
-                        y2: 1, //上
-                        colorStops: [{
-                            offset: 0,
-                            color: '#4BFFFC'
-                        }, {
-                            offset: 0.5,
-                            color: 'rgba(0,0,0,0)'
-                        }, {
-                            offset: 1,
-                            color: '#4BFFFC'
-                        }],
-                        globalCoord: false
+            areaStyle: {
+              normal: {
+                // 单项区域填充样式
+                color: {
+                  type: "linear",
+                  x: 0, //右
+                  y: 0, //下
+                  x2: 1, //左
+                  y2: 1, //上
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "#4BFFFC",
                     },
-                    opacity: 1 // 区域透明度
-                }
-            }
-    }
-];
-var colorArr = ['#4A99FF', '#4BFFFC']; //颜色
- const option = {
-    // backgroundColor: ,
-    title: {
-        show: false,
-        text: "机体损伤原因分析",
-        x: "4%",
+                    {
+                      offset: 0.5,
+                      color: "rgba(0,0,0,0)",
+                    },
+                    {
+                      offset: 1,
+                      color: "#4BFFFC",
+                    },
+                  ],
+                  globalCoord: false,
+                },
+                opacity: 1, // 区域透明度
+              },
+            },
+          },
+        ];
+        var colorArr = ["#4A99FF", "#4BFFFC"]; //颜色
+        const option = {
+          // backgroundColor: ,
+          title: {
+            show: false,
+            text: "机体损伤原因分析",
+            x: "4%",
 
-        textStyle: {
-            color: '#4A99FF',
-            fontSize: '22'
-        },
-        subtextStyle: {
-            color: '#90979c',
-            fontSize: '16',
-
-        },
-    },
-    color: colorArr,
-    legend: {
-        orient:'vertical',
-        icon: 'circle', //图例形状
-        data: legendData,
-        bottom:35,
-        right:40,
-        itemWidth: 10, // 图例标记的图形宽度。[ default: 25 ]
-        itemHeight: 10, // 图例标记的图形高度。[ default: 14 ]
-        itemGap: 21, // 图例每项之间的间隔。[ default: 10 ]横向布局时为水平间隔，纵向布局时为纵向间隔。
-        textStyle: {
-            fontSize: 14,
-            color: '#00E4FF',
-        },
-    },
-    radar: {
-        // shape: 'circle',
-        name: {
             textStyle: {
-                color: '#fff',
-                fontSize: 16
+              color: "#4A99FF",
+              fontSize: "22",
             },
-        },
-        indicator: indicator,
-        splitArea: { // 坐标轴在 grid 区域中的分隔区域，默认不显示。
-            show: true,
-            areaStyle: { // 分隔区域的样式设置。
-                color: ['rgba(255,255,255,0)', 'rgba(255,255,255,0)'], // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
-            }
-        },
-        axisLine: { //指向外圈文本的分隔线样式
-            lineStyle: {
-                color: '#153269'
-            }
-        },
-        splitLine: {
-            lineStyle: {
-                color: '#113865', // 分隔线颜色
+            subtextStyle: {
+              color: "#90979c",
+              fontSize: "16",
+            },
+          },
+          color: colorArr,
+          legend: {
+            orient: "vertical",
+            icon: "circle", //图例形状
+            data: legendData,
+            bottom: 35,
+            right: 40,
+            itemWidth: 10, // 图例标记的图形宽度。[ default: 25 ]
+            itemHeight: 10, // 图例标记的图形高度。[ default: 14 ]
+            itemGap: 21, // 图例每项之间的间隔。[ default: 10 ]横向布局时为水平间隔，纵向布局时为纵向间隔。
+            textStyle: {
+              fontSize: 16,
+              color: "#00E4FF",
+            },
+          },
+          radar: {
+            // shape: 'circle',
+            name: {
+              textStyle: {
+                color: "#fff",
+                fontSize: 14,
+              },
+            },
+            indicator: indicator,
+            splitArea: {
+              // 坐标轴在 grid 区域中的分隔区域，默认不显示。
+              show: true,
+              areaStyle: {
+                // 分隔区域的样式设置。
+                color: ["rgba(255,255,255,0)", "rgba(255,255,255,0)"], // 分隔区域颜色。分隔区域会按数组中颜色的顺序依次循环设置颜色。默认是一个深浅的间隔色。
+              },
+            },
+            axisLine: {
+              //指向外圈文本的分隔线样式
+              lineStyle: {
+                color: "#153269",
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#113865", // 分隔线颜色
                 width: 1, // 分隔线线宽
-            }
-        },
-    },
-    series: [{
-        type: 'radar',
-        symbolSize: 6,
-        // symbol: 'angle',
-        data: dataArr
-    }]
-};
+              },
+            },
+          },
+          series: [
+            {
+              type: "radar",
+              symbolSize: 6,
+              // symbol: 'angle',
+              data: dataArr,
+            },
+          ],
+        };
 
-
-       myChart.setOption(option);
+        myChart.setOption(option);
         window.addEventListener("resize", function () {
           myChart.resize();
         });
-
-
-
-     }
+      }
     },
 
     //仪表盘
@@ -1082,349 +1145,353 @@ var colorArr = ['#4A99FF', '#4BFFFC']; //颜色
       const ratechart = this.$refs.ratechart;
       if (ratechart) {
         const myChart = this.$echarts.init(ratechart);
-const dataArr = 86;
-const dataX = 100;
-const height1  = {value:600};
- const  option = {
-    // backgroundColor: '#031f45',
-    /** 标题*/
-    title: [
-        {
-            text:
-                '{val|' + 86+ '}{unit|' + '%' + '}\n{name|' + '整机性能评估'+'}',
-            bottom: '32%',
-            left: 'center',
-            textStyle: {
+        const dataArr = 86;
+        const dataX = 100;
+        const height1 = { value: 600 };
+        const option = {
+          // backgroundColor: '#031f45',
+          /** 标题*/
+          title: [
+            {
+              text:
+                "{val|" +
+                86.37 +
+                "}{unit|" +
+                "%" +
+                "}\n{name|" +
+                "整机性能评估" +
+                "}",
+              bottom: "32%",
+              left: "center",
+              textStyle: {
                 rich: {
-                    val: {
-                        fontSize:'18',
-                        color: '#DCCC5F',
-                        padding: [10, 0],
-                    },
-                    name: {
-                        fontSize: '16',
-                        color: '#fff',
-                    },
-                    unit: {
-                        fontSize:'18',
-                        color: '#DCCC5F',
-                    },
+                  val: {
+                    fontSize: "18",
+                    color: "#DCCC5F",
+                    padding: [10, 0],
+                  },
+                  name: {
+                    fontSize: "16",
+                    color: "#fff",
+                  },
+                  unit: {
+                    fontSize: "18",
+                    color: "#DCCC5F",
+                  },
                 },
+              },
+              triggerEvent: true,
             },
-            triggerEvent: true,
-        },
-    ],
+          ],
 
-    /** 关闭必图例*/
-    legend: {
-        show: false,
-    },
-    series: [
-        {
-            name: '最外部进度条',
-            type: 'gauge',
-            radius: '90%',
-            splitNumber: 10,
-            axisLine: {
+          /** 关闭必图例*/
+          legend: {
+            show: false,
+          },
+          series: [
+            {
+              name: "最外部进度条",
+              type: "gauge",
+              radius: "90%",
+              splitNumber: 10,
+              axisLine: {
                 lineStyle: {
-                    color: [
-                        [
-                            dataArr / dataX,
-                            {
-                                type: 'linear',
-                                x: 0,
-                                y: 1,
-                                x2: 0.5,
-                                y2: 0.5,
-                                colorStops: [
-                                    {
-                                        offset: 0,
-                                        color: 'rgba(0,0,0,0)', // 0% 处的颜色
-                                    },
-                                    {
-                                        offset: 0.8,
-                                        color: '#583043', // 100% 处的颜色
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#C34743', // 100% 处的颜色
-                                    },
-                                ],
-                                global: false, // 缺省为 false
-                            },
+                  color: [
+                    [
+                      dataArr / dataX,
+                      {
+                        type: "linear",
+                        x: 0,
+                        y: 1,
+                        x2: 0.5,
+                        y2: 0.5,
+                        colorStops: [
+                          {
+                            offset: 0,
+                            color: "rgba(0,0,0,0)", // 0% 处的颜色
+                          },
+                          {
+                            offset: 0.8,
+                            color: "#583043", // 100% 处的颜色
+                          },
+                          {
+                            offset: 1,
+                            color: "#C34743", // 100% 处的颜色
+                          },
                         ],
-                        [1, '#083158'],
+                        global: false, // 缺省为 false
+                      },
                     ],
-                    width: 10,
+                    [1, "#083158"],
+                  ],
+                  width: 10,
                 },
-            },
-            axisLabel: {
+              },
+              axisLabel: {
                 show: false,
-            },
-            axisTick: {
+              },
+              axisTick: {
                 show: false,
-            },
-            splitLine: {
+              },
+              splitLine: {
                 show: false,
-            },
-            itemStyle: {
+              },
+              itemStyle: {
                 show: false,
-            },
-            detail: {
+              },
+              detail: {
                 show: false,
-            },
-            title: {
+              },
+              title: {
                 // 标题
                 show: false,
-            },
-            data: [
+              },
+              data: [
                 {
-                    name: 'title',
-                    value: dataArr,
+                  name: "title",
+                  value: dataArr,
                 },
-            ],
-            pointer: {
+              ],
+              pointer: {
                 show: false,
+              },
+              animationDuration: 4000,
             },
-            animationDuration: 4000,
-        },
 
-        {
-            name: '刻度尺',
-            type: 'gauge',
-            radius: '81%',
-            splitNumber: 10, // 刻度数量
-            min: 0, // 最小刻度
-            max: dataX, // 最大刻度
-            // 仪表盘轴线相关配置
-            axisLine: {
+            {
+              name: "刻度尺",
+              type: "gauge",
+              radius: "81%",
+              splitNumber: 10, // 刻度数量
+              min: 0, // 最小刻度
+              max: dataX, // 最大刻度
+              // 仪表盘轴线相关配置
+              axisLine: {
                 lineStyle: {
-                    color: [
-                        [
-                            1,
-                            {
-                                type: 'radial',
-                                x: 0.5,
-                                y: 0.6,
-                                r: 0.6,
-                                colorStops: [
-                                    {
-                                        offset: 0.85,
-                                        color: '#031F46', // 0% 处的颜色
-                                    },
-                                    {
-                                        offset: 0.93,
-                                        color: '#086989', // 100% 处的颜色
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#12D7EF', // 100% 处的颜色
-                                    },
-                                ],
-                            },
+                  color: [
+                    [
+                      1,
+                      {
+                        type: "radial",
+                        x: 0.5,
+                        y: 0.6,
+                        r: 0.6,
+                        colorStops: [
+                          {
+                            offset: 0.85,
+                            color: "#031F46", // 0% 处的颜色
+                          },
+                          {
+                            offset: 0.93,
+                            color: "#086989", // 100% 处的颜色
+                          },
+                          {
+                            offset: 1,
+                            color: "#12D7EF", // 100% 处的颜色
+                          },
                         ],
+                      },
                     ],
-                    width: 500,
+                  ],
+                  width: 500,
                 },
-            },
-            /** 分隔线样式*/
-            splitLine: {
+              },
+              /** 分隔线样式*/
+              splitLine: {
                 show: true,
                 length: 14,
                 lineStyle: {
-                    width: 3,
-                    color: '#12E5FE', // 用颜色渐变函数不起作用
+                  width: 3,
+                  color: "#12E5FE", // 用颜色渐变函数不起作用
                 },
-            },
-            /** 刻度线*/
-            axisTick: {
+              },
+              /** 刻度线*/
+              axisTick: {
                 show: true,
                 splitNumber: 20,
                 lineStyle: {
-                    color: '#12E5FE', // 用颜色渐变函数不起作用
-                    width: 1,
+                  color: "#12E5FE", // 用颜色渐变函数不起作用
+                  width: 1,
                 },
                 length: 5,
-            },
-            /** 刻度标签*/
-            axisLabel: {
+              },
+              /** 刻度标签*/
+              axisLabel: {
                 distance: 2,
-                color: '#CEF3FE',
-            },
-            detail: {
+                color: "#CEF3FE",
+              },
+              detail: {
                 show: false,
+              },
+              animationDuration: 4000,
             },
-            animationDuration: 4000,
-        },
-        {
-            name: '外部指针',
-            type: 'gauge',
-            radius: '90%',
-            axisLine: {
+            {
+              name: "外部指针",
+              type: "gauge",
+              radius: "90%",
+              axisLine: {
                 lineStyle: {
-                    color: [
-                        [dataArr / dataX - 0.001, 'rgba(0,0,0,0)'],
-                        [dataArr / dataX + 0.003, '#C34743'],
-                        [1, 'rgba(0,0,0,0)'],
-                    ],
-                    width: 33,
+                  color: [
+                    [dataArr / dataX - 0.001, "rgba(0,0,0,0)"],
+                    [dataArr / dataX + 0.003, "#C34743"],
+                    [1, "rgba(0,0,0,0)"],
+                  ],
+                  width: 33,
                 },
-            },
-            axisLabel: {
+              },
+              axisLabel: {
                 show: false,
-            },
-            axisTick: {
+              },
+              axisTick: {
                 show: false,
-            },
-            splitLine: {
+              },
+              splitLine: {
                 show: false,
-            },
-            itemStyle: {
+              },
+              itemStyle: {
                 show: false,
-            },
-            detail: {
+              },
+              detail: {
                 show: false,
-            },
-            title: {
+              },
+              title: {
                 // 标题
                 show: false,
-            },
-            data: [
+              },
+              data: [
                 {
-                    name: 'title',
-                    value: dataArr,
+                  name: "title",
+                  value: dataArr,
                 },
-            ],
-            pointer: {
+              ],
+              pointer: {
                 show: false,
+              },
+              animationDuration: 4000,
             },
-            animationDuration: 4000,
-        },
-        {
-            name: '内层带指针',
-            type: 'gauge',
-            radius: '61%',
-            splitNumber: 10, // 刻度数量
-            min: 0, // 最小刻度
-            max: dataX, // 最大刻度
-            // 仪表盘轴线相关配置
-            axisLine: {
+            {
+              name: "内层带指针",
+              type: "gauge",
+              radius: "61%",
+              splitNumber: 10, // 刻度数量
+              min: 0, // 最小刻度
+              max: dataX, // 最大刻度
+              // 仪表盘轴线相关配置
+              axisLine: {
                 lineStyle: {
-                    color: [
-                        [
-                            1,
-                            {
-                                type: 'radial',
-                                x: 0.5,
-                                y: 0.59,
-                                r: 0.6,
-                                colorStops: [
-                                    {
-                                        offset: 0.72,
-                                        color: '#032046',
-                                    },
-                                    {
-                                        offset: 0.94,
-                                        color: '#086989',
-                                    },
-                                    {
-                                        offset: 0.98,
-                                        color: '#0FAFCB',
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#0EA4C1',
-                                    },
-                                ],
-                            },
+                  color: [
+                    [
+                      1,
+                      {
+                        type: "radial",
+                        x: 0.5,
+                        y: 0.59,
+                        r: 0.6,
+                        colorStops: [
+                          {
+                            offset: 0.72,
+                            color: "#032046",
+                          },
+                          {
+                            offset: 0.94,
+                            color: "#086989",
+                          },
+                          {
+                            offset: 0.98,
+                            color: "#0FAFCB",
+                          },
+                          {
+                            offset: 1,
+                            color: "#0EA4C1",
+                          },
                         ],
+                      },
                     ],
-                    width: 1000,
+                  ],
+                  width: 1000,
                 },
-            },
-            /** 分隔线样式*/
-            splitLine: {
+              },
+              /** 分隔线样式*/
+              splitLine: {
                 show: false,
-            },
-            /** 刻度线*/
-            axisTick: {
+              },
+              /** 刻度线*/
+              axisTick: {
                 show: false,
-            },
-            /** 刻度标签*/
-            axisLabel: {
+              },
+              /** 刻度标签*/
+              axisLabel: {
                 show: false,
-            },
-            /** 仪表盘指针*/
-            pointer: {
+              },
+              /** 仪表盘指针*/
+              pointer: {
                 show: true,
-                length: '95%',
+                length: "95%",
                 width: 5, // 指针粗细
-            },
-            /** 仪表盘指针样式*/
-            itemStyle: {
-                color: '#12E5FF',
-            },
-            data: [
+              },
+              /** 仪表盘指针样式*/
+              itemStyle: {
+                color: "#12E5FF",
+              },
+              data: [
                 {
-                    value: dataArr,
+                  value: dataArr,
                 },
-            ],
-            detail: {
+              ],
+              detail: {
                 show: false,
+              },
             },
-        },
-    ],
-    graphic: {
-        elements: [
-            {
-                type: 'line',
+          ],
+          graphic: {
+            elements: [
+              {
+                type: "line",
                 z: 4,
                 style: {
-                    fill: '#075173',
-                    stroke: '#075173',
-                    lineWidth: 2,
-                    shadowBlur: 15,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: -4,
-                    shadowColor: '#13E6FF',
+                  fill: "#075173",
+                  stroke: "#075173",
+                  lineWidth: 2,
+                  shadowBlur: 15,
+                  shadowOffsetX: 0,
+                  shadowOffsetY: -4,
+                  shadowColor: "#13E6FF",
                 },
                 shape: {
-                    x1: height1.value * 0.57,
-                    y1: 0,
-                    x2: 0,
-                    y2: 0,
+                  x1: height1.value * 0.57,
+                  y1: 0,
+                  x2: 0,
+                  y2: 0,
                 },
-                left: 'center',
-                bottom: '21%',
+                left: "center",
+                bottom: "21%",
                 silent: true,
-            },
-            {
-                type: 'line',
+              },
+              {
+                type: "line",
                 z: 4,
                 style: {
-                    fill: '#075173',
-                    stroke: '#075173',
-                    lineWidth: 2,
-                    shadowBlur: 15,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: -4,
-                    shadowColor: '#13E6FF',
+                  fill: "#075173",
+                  stroke: "#075173",
+                  lineWidth: 2,
+                  shadowBlur: 15,
+                  shadowOffsetX: 0,
+                  shadowOffsetY: -4,
+                  shadowColor: "#13E6FF",
                 },
                 shape: {
-                    x1: height1.value * 0.43,
-                    y1: 0,
-                    x2: 0,
-                    y2: 0,
+                  x1: height1.value * 0.43,
+                  y1: 0,
+                  x2: 0,
+                  y2: 0,
                 },
-                left: 'center',
-                bottom: '28.5%',
+                left: "center",
+                bottom: "28.5%",
                 silent: true,
-            },
-        ],
-    },
-};
-
-
+              },
+            ],
+          },
+        };
 
         myChart.setOption(option);
         window.addEventListener("resize", function () {
@@ -1432,9 +1499,6 @@ const height1  = {value:600};
         });
       }
 
-
-
-      
       this.$on("hook:destroyed", () => {
         window.removeEventListener("resize", function () {
           myChart.resize();
@@ -1476,137 +1540,172 @@ const height1  = {value:600};
   }
 
   // 小标题
-  .title2{
+  .title2 {
     display: flex;
     justify-content: center;
-    .centertitle{
+    .centertitle {
       color: #8ed1fd;
       font-size: 14px;
       transform: translateY(25px);
       font-weight: bold;
-      .hour{
+      .hour {
         font-weight: bold;
         color: red;
-        
       }
     }
   }
 
-  .mainbody{
+  .mainbody {
     display: flex;
     justify-content: space-between;
 
-  //左边部分
-  .leftbody{
-  width: 400px;
-    // background-color: paleturquoise;
-  //       #canvas {
-  // width: 400px;
-  // height: 400px;
-  //       }
-  // 扇形图
-  #piechart {
-    // background-color: green;
-    transform: translate(50px, -10px);
+    //左边部分
+    .leftbody {
+      width: 400px;
+      // background-color: paleturquoise;
+      //       #canvas {
+      // width: 400px;
+      // height: 400px;
+      //       }
+      // 扇形图
+      #piechart {
+        // background-color: green;
+        transform: translate(50px, -10px);
 
-    // background-color: red;
-  }
-
-  // 柱状图
-  #barchart{
-    background-color: plum;
-
-  }
-
-  //雷达图
-  #raderchart{
-    // background-color: #fff;
-    transform: translate(-40px, 170px);
-    padding-left: 30px;
-    // margin-top: 5px;
-    
-  }
-
-  }
-    
-  //中心部分
-  .centerbody{
-    flex:1;
-    
-    //飞机模型与图片
-    .top{
-      display: flex;
-      justify-content: center;
-      // background-color: rgb(27, 203, 121);
-
-    #canvas {
-      width: 760px;
-      height: 560px;
-      transform: translate(10px, -70px);
+        // background-color: red;
       }
 
-    .img{
-    transform: translate(-140px, 350px);
+      // 柱状图
+      #barchart {
+        background-color: plum;
+      }
+
+      //雷达图
+      #raderchart {
+        // background-color: #fff;
+        transform: translate(-40px, 170px);
+        padding-left: 30px;
+        // margin-top: 5px;
+      }
     }
+
+    //中心部分
+    .centerbody {
+      flex: 1;
+
+      //飞机模型与图片
+      .top {
+        display: flex;
+        justify-content: center;
+        // background-color: rgb(27, 203, 121);
+
+        #canvas {
+          width: 760px;
+          height: 560px;
+          transform: translate(10px, -70px);
+        }
+
+        .img {
+          transform: translate(-140px, 350px);
+        }
       }
 
-     .linechart{
-      // background-color: blue;
-      height: 300px;
-      transform: translate(20px, -170px);
-     }
+      .linechart {
+        // background-color: blue;
+        height: 300px;
+        transform: translate(20px, -170px);
+      }
+    }
 
-    
+    //右边部分
+    .rightbody {
+      width: 400px;
+      // background-color: red;
 
+      // 选择时间部分
+      .choosetime {
+        color: #fff;
+        font-weight: bold;
+        // background-color: blue;
+        height: 105px;
+        transform: translate(-70px, 20px);
+      }
+
+      .aibox {
+        //大标题
+        .title {
+          font-size: 22px;
+          // letter-spacing: 2px;
+          color: #8ed1fd;
+          // height: 100px;
+          font-weight: bold;
+          // background-color: red;
+          transform: translate(0px, 10px);
+        }
+
+        //剩余寿命的标题
+        .resttime {
+          font-size: 17px;
+          color: #8ed1fd;
+          padding-top: 16px;
+          // height: 100px;
+          font-weight: bold;
+          // background-color: red;
+          transform: translate(-43px, 10px);
+        }
+
+        // 剩余寿命
+        .time {
+          display: flex;
+          flex: 1;
+          height: 100px;
+          width: 270px;
+          // background-color: red;
+          transform: translate(-50px, 20px);
+          .time1 {
+            color: #fff;
+            font-size: 16px;
+            height: 100px;
+            width: 90px;
+            // background-color: blue;
+            .word {
+              padding-bottom: 15px;
+              padding-top: 5px;
+              // font
+            }
+            .number {
+              font-size: 19px;
+              color: #8ddbea;
+              font-weight: bold;
+            }
+
+            // .number1 {
+            //   color: red;
+            //   font-weight: bold;
+            // }
+          }
+        }
+
+        .risk {
+          font-size: 17px;
+          color: #8ed1fd;
+          padding-top: 16px;
+          // height: 100px;
+          font-weight: bold;
+          // background-color: red;
+          transform: translate(-13px, 10px);
+        }
+      }
+
+      // 仪表盘
+      #ratechart {
+        width: 200px;
+        height: 200px;
+        background-color: blues;
+        transform: translate(-60px, 240px);
+      }
+    }
   }
-
-  //右边部分
-  .rightbody{
-    width: 400px;
-    // background-color: red;
-
-  // 选择时间部分
-  .choosetime{
-    color: #fff;
-    font-weight: bold;
-    // background-color: blue;
-    height: 105px;
-   transform: translate(-70px,20px);
-    
-  }
-
-
-.aibox{
-  .title{
-  font-size: 20px;
-  color:#8ed1fd;
-  height: 100px;
-  font-weight: bold;
-  // background-color: red;
-  transform: translate(0px,10px);
-  }
-
-
-}
-
-
-  // 仪表盘
-  #ratechart{
-    width: 200px;
-    height: 200px;
-    background-color: blues;
-  transform: translate(-70px, 220px);
-    
-  }
-    
-  }
-
-
-  }
-
-
-
-
 }
 </style>
 
