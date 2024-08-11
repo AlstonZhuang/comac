@@ -21,6 +21,9 @@ import '@/permission' // permission control
 import * as echarts from 'echarts';
 Vue.prototype.$echarts = echarts //可以全局使用 不用每次使用需要在页面导入
 
+//引入阿里图标
+import "../public/icons/iconfont.css"
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

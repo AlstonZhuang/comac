@@ -25,13 +25,13 @@
         ></div>
 
         <!-- 柱状图 -->
-        <!-- <div id="barchart" ref="barchart" style="width: 168px; height: 168px"></div> -->
+        <div id="barchart" ref="barchart" style="width: 328px; height: 208px;paddingtop:10px"></div>
 
         <!-- 雷达图 -->
         <div
           ref="raderchart"
           id="raderchart"
-          style="width: 468px; height: 246px"
+          style="width: 468px; height: 236px"
         ></div>
 
         <!-- <div ref="chart1" style="width: 468px; height: 468px"></div> -->
@@ -69,6 +69,7 @@
               placeholder="3000"
               size="small"
               style="width: 110px"
+              :teleported="false"
             >
               <el-option
                 v-for="item in options"
@@ -88,41 +89,71 @@
           <div class="resttime">系统预测剩余寿命（飞行小时）</div>
           <div class="time">
             <div class="time1">
-              <div class="word">发动机</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-mseweifuwuyinqing"></i>
+                </span>
+                <div class="name">发动机</div>
+                </div>
               <div class="number number1">3000</div>
             </div>
             <div class="time1">
-              <div class="word">APU</div>
-              <div class="number">2000</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-dianyuanbaozhang"></i>
+                </span>
+                <div class="name">APU</div>
+                </div>
+              <div class="number number1">2000</div>
             </div>
             <div class="time1">
-              <div class="word">电源系统</div>
-              <div class="number number3">4000</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-2kongqilvxin"></i>
+                </span>
+                <div class="name">气源系统</div>
+                </div>
+              <div class="number number1">4000</div>
             </div>
           </div>
           <div class="risk">系统预测运行风险</div>
           <div class="time">
             <div class="time1">
-              <div class="word">发动机</div>
-              <div class="number number1">6.9%</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-mseweifuwuyinqing"></i>
+                </span>
+                <div class="name">发动机</div>
+                </div>
+              <div class="number number1">5.63%</div>
             </div>
             <div class="time1">
-              <div class="word">APU</div>
-              <div class="number">5.6%</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-dianyuanbaozhang"></i>
+                </span>
+                <div class="name">APU</div>
+                </div>
+              <div class="number number1">3.56%</div>
             </div>
             <div class="time1">
-              <div class="word">电源系统</div>
-              <div class="number number3">3.1%</div>
+              <div class="word">
+                <span>
+                <i class="iconfont icon-2kongqilvxin"></i>
+                </span>
+                <div class="name">气源系统</div>
+                </div>
+              <div class="number number1">1.64%</div>
             </div>
           </div>
         </div>
 
         <!-- 仪表盘 -->
-        <!-- <div
+        <div
           ref="ratechart"
           id="ratechart"
           style="width: 226px; height: 226px"
-        ></div> -->
+        ></div>
       </div>
     </div>
   </div>
@@ -393,15 +424,15 @@ export default {
                 normal: {
                   color: function (params) {
                     var colorList = [
+                      "#4e46da",
                       "#f845f1",
                       "#ad46f3",
-                      "#5045f6",
                       "#4777f5",
                       "#44aff0",
                       "#45dbf7",
-                      "#f6d54a",
+                      "#f07050",
                       "#f69846",
-                      "#ff4343",
+                      "#f6d54a",
                     ];
                     return colorList[params.dataIndex % colorList.length];
                   },
@@ -433,199 +464,214 @@ export default {
       if (barchart) {
         const myChart = this.$echarts.init(barchart);
 
-        var data = [
-          {
-            name: "一月",
-            value: 80,
-          },
-          {
-            name: "二月",
-            value: 87.8,
-          },
-          {
-            name: "三月",
-            value: 71,
-          },
-          {
-            name: "四月",
-            value: 80,
-          },
-          {
-            name: "五月",
-            value: 66,
-          },
-          {
-            name: "六月",
-            value: 80,
-          },
-          {
-            name: "七月",
-            value: 80,
-          },
-        ];
-        var xData = [],
-          yData = [];
-        var min = 50;
-        data.map(function (a, b) {
-          xData.push(a.name);
-          if (a.value === 0) {
-            yData.push(a.value + min);
-          } else {
-            yData.push(a.value);
-          }
-        });
-        const option = {
-          backgroundColor: "#111c4e",
-          color: ["#3398DB"],
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "line",
-              lineStyle: {
-                opacity: 0,
-              },
-            },
-            formatter: function (prams) {
-              if (prams[0].data === min) {
-                return "合格率：0%";
-              } else {
-                return "合格率：" + prams[0].data + "%";
-              }
+var data = [{
+    "name": "发动机",
+    "value": 800
+}, {
+    "name": "APU",
+    "value": 878
+}, {
+    "name": "燃油",
+    "value": 710
+}, {
+    "name": "液压",
+    "value": 800
+}, {
+    "name": "电源",
+    "value": 360
+}, {
+    "name": "导航",
+    "value": 800
+}
+];
+var xData = [],
+    yData = [];
+var min = 50; 
+data.map(function(a, b) {
+    xData.push(a.name);
+    if (a.value === 0) {
+        yData.push(a.value + min);
+    } else {
+        yData.push(a.value);
+    }
+});
+const option = {
+          title: {
+            text: "系统平均更换使用寿命",
+            left: "center",
+            top: -5,
+            // right: 10,
+            // top: 10,
+            textStyle: {
+              color: "#85cfe3",
+              fontSize: 14,
             },
           },
-          legend: {
-            data: ["直接访问", "背景"],
-            show: false,
-          },
-          grid: {
-            left: "0%",
-            right: "0%",
-            bottom: "5%",
-            top: "7%",
-            height: "85%",
-            containLabel: true,
-            z: 22,
-          },
-          xAxis: [
-            {
-              type: "category",
-              gridIndex: 0,
-              data: xData,
-              axisTick: {
-                alignWithLabel: true,
-              },
-              axisLine: {
+    color: ['#3398DB'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'line',
+            lineStyle: {
+                opacity: 0
+            }
+        },
+        formatter: function(prams) {
+            if (prams[0].data === min) {
+                return "平均更换使用寿命%"
+            } else {
+                return "平均更换使用寿命:" + prams[0].data 
+            }
+        }
+    },
+    legend: {
+        data: ['直接访问', '背景'],
+        show: false
+    },
+    grid: {
+        left: '0%',
+        right: '0%',
+        bottom: '5%',
+        top: '7%',
+        height: '85%',
+        containLabel: true,
+        z: 22
+    },
+    xAxis: [{
+        type: 'category',
+        gridIndex: 0,
+        data: xData,
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#0c3b71'
+            }
+        },
+        axisLabel: {
+          
+            show: true,
+             color: '#fff',
+             fontSize:13,
+            interval: 0 ,
+
+        rotate: 0 , // 文字倾斜角度
+
+        // formatter: function (value) {
+        //     return value.split("").join("\n") //垂直显示
+
+        // },
+        }
+    }],
+    yAxis: [{
+            type: 'value',
+            gridIndex: 0,
+            splitLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            min: min,
+            max: 1000,
+            axisLine: {
                 lineStyle: {
-                  color: "#0c3b71",
-                },
-              },
-              axisLabel: {
-                show: true,
-                color: "rgb(170,170,170)",
-                fontSize: 16,
-              },
+                    color: '#0c3b71'
+                }
             },
-          ],
-          yAxis: [
-            {
-              type: "value",
-              gridIndex: 0,
-              splitLine: {
-                show: false,
-              },
-              axisTick: {
-                show: false,
-              },
-              min: min,
-              max: 100,
-              axisLine: {
-                lineStyle: {
-                  color: "#0c3b71",
-                },
-              },
-              axisLabel: {
-                color: "rgb(170,170,170)",
-                formatter: "{value} %",
-              },
+            axisLabel: {
+                color: '#8ed1fd',
+                formatter: '{value}'
+            }
+        },
+        {
+            type: 'value',
+            gridIndex: 0,
+            min: min,
+            max: 100,
+            splitNumber: 12,
+            splitLine: {
+                show: false
             },
-            {
-              type: "value",
-              gridIndex: 0,
-              min: min,
-              max: 100,
-              splitNumber: 12,
-              splitLine: {
-                show: false,
-              },
-              axisLine: {
-                show: false,
-              },
-              axisTick: {
-                show: false,
-              },
-              axisLabel: {
-                show: false,
-              },
-              splitArea: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                show: false
+            },
+            splitArea: {
                 show: true,
                 areaStyle: {
-                  color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"],
-                },
-              },
-            },
-          ],
-          series: [
-            {
-              name: "合格率",
-              type: "bar",
-              barWidth: "30%",
-              xAxisIndex: 0,
-              yAxisIndex: 0,
-              itemStyle: {
+                    color: ['rgba(250,250,250,0.0)', 'rgba(250,250,250,0.05)']
+                }
+            }
+        }
+    ],
+    series: [{
+            name: '合格率',
+            type: 'bar',
+            barWidth: '30%',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            itemStyle: {
                 normal: {
-                  barBorderRadius: 30,
-                  color: new this.echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    {
-                      offset: 0,
-                      color: "#00feff",
-                    },
-                    {
-                      offset: 0.5,
-                      color: "#027eff",
-                    },
-                    {
-                      offset: 1,
-                      color: "#0286ff",
-                    },
-                  ]),
-                },
-              },
-              data: yData,
-              zlevel: 11,
+                    barBorderRadius: 30,
+                    color: new echarts.graphic.LinearGradient(
+                        0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#00feff'
+                            },
+                            {
+                                offset: 0.5,
+                                color: '#027eff'
+                            },
+                            {
+                                offset: 1,
+                                color: '#0286ff'
+                            }
+                        ]
+                    )
+                }
             },
-            {
-              name: "背景",
-              type: "bar",
-              barWidth: "50%",
-              xAxisIndex: 0,
-              yAxisIndex: 1,
-              barGap: "-135%",
-              data: [100, 100, 100, 100, 100, 100, 100],
-              itemStyle: {
+            data: yData,
+            zlevel: 11
+
+        },
+        {
+            name: '背景',
+            type: 'bar',
+            barWidth: '50%',
+            xAxisIndex: 0,
+            yAxisIndex: 1,
+            barGap: '-135%',
+            data: [100, 100, 100, 100, 100, 100, 100],
+            itemStyle: {
                 normal: {
-                  color: "rgba(255,255,255,0.1)",
-                },
-              },
-              zlevel: 9,
+                    color: 'rgba(255,255,255,0.1)'
+                }
             },
-          ],
-        };
+            zlevel: 9
+        },
+      
+    ]
+};
+
+
 
         myChart.setOption(option);
         window.addEventListener("resize", function () {
           myChart.resize();
         });
       }
+
+
+
+
+      
       this.$on("hook:destroyed", () => {
         window.removeEventListener("resize", function () {
           myChart.resize();
@@ -1084,7 +1130,7 @@ export default {
             icon: "circle", //图例形状
             data: legendData,
             bottom: 35,
-            right: 40,
+            right: 0,
             itemWidth: 10, // 图例标记的图形宽度。[ default: 25 ]
             itemHeight: 10, // 图例标记的图形高度。[ default: 14 ]
             itemGap: 21, // 图例每项之间的间隔。[ default: 10 ]横向布局时为水平间隔，纵向布局时为纵向间隔。
@@ -1577,13 +1623,15 @@ export default {
 
       // 柱状图
       #barchart {
-        background-color: plum;
+        // background-color: plum;
+        transform: translate(60px,-15px);
+        // padding-top: 10px;
       }
 
       //雷达图
       #raderchart {
         // background-color: #fff;
-        transform: translate(-40px, 170px);
+        transform: translate(-56px,-20px);
         padding-left: 30px;
         // margin-top: 5px;
       }
@@ -1629,6 +1677,38 @@ export default {
         // background-color: blue;
         height: 105px;
         transform: translate(-70px, 20px);
+::v-deep .el-input.el-input--suffix {
+  // 修改背景颜色、字体颜色、边框、宽高
+  .el-input__inner {
+    background: #8ed1fd !important;
+    // border: 1px solid #4c78ff;
+    color: #fff;
+
+    font-weight: bold;
+    font-size: 16px;
+    // height: 30px;
+    // width: 140px;
+  }
+  // 符号的位置会错乱，进行修正（水平）
+  .el-input__suffix-inner {
+    position: absolute;
+    left: -25px;
+  }
+
+  // 符号的位置会错乱，进行修正（垂直）
+  .el-select__caret.el-input__icon.el-icon-arrow-up {
+    line-height: 30px;
+  }
+
+  .el-input__inner::placeholder {
+    color: #fff;
+  }
+
+  .el-icon-arrow-up:before {
+    color: #fff;
+  }
+}
+
       }
 
       .aibox {
@@ -1659,30 +1739,52 @@ export default {
           display: flex;
           flex: 1;
           height: 100px;
-          width: 270px;
+          width: 300px;
           // background-color: red;
-          transform: translate(-50px, 20px);
+          transform: translate(-90px, 20px);
           .time1 {
             color: #fff;
             font-size: 16px;
             height: 100px;
-            width: 90px;
-            // background-color: blue;
+            width: 110px;
             .word {
+              display: flex;
+              flex:1;
               padding-bottom: 15px;
               padding-top: 5px;
+        
+              .iconfont{
+                font-size: 33px;
+                color: #8ed1fd;
+                padding-bottom: 80px;
+          // transform: translateY(90px)/
+              
+                // color: #4e46da;
+
+                
+              }
+              .name{
+            // background-color: blue;
+            padding-top: 10px;
+            padding-left: 3px;
+            // height: 30px;
+                // color:#4e46da ;
+          // transform: translate(0px,90px) !important;
+              }
               // font
             }
             .number {
               font-size: 19px;
-              color: #8ddbea;
+              color: #f2d21f;
               font-weight: bold;
+          transform: translate(35px,0px)
+
             }
 
-            // .number1 {
-            //   color: red;
-            //   font-weight: bold;
-            // }
+            .number1 {
+              // color: #f07050;
+              font-weight: bold;
+            }
           }
         }
 
@@ -1701,8 +1803,8 @@ export default {
       #ratechart {
         width: 200px;
         height: 200px;
-        background-color: blues;
-        transform: translate(-60px, 240px);
+        // background-color: blue;
+        transform: translate(-50px,30px);
       }
     }
   }
